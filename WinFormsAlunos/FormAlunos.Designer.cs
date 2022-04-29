@@ -165,6 +165,7 @@
             this.btnRemoverDisciplina.TabIndex = 6;
             this.btnRemoverDisciplina.Text = "Remover Disciplina";
             this.btnRemoverDisciplina.UseVisualStyleBackColor = true;
+            this.btnRemoverDisciplina.Click += new System.EventHandler(this.btnRemoverDisciplina_Click);
             // 
             // btnAdicionarDisciplina
             // 

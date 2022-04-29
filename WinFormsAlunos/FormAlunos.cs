@@ -4,10 +4,6 @@ namespace WinFormsAlunos
 {
     public partial class FormAlunos : Form
     {
-        //List<Aluno> _alunos;
-
-        List<Disciplina> Disciplinas;
-
         Aluno alunoTemp = null;
 
         int contaAlunos = 1;
@@ -15,17 +11,9 @@ namespace WinFormsAlunos
         {
             InitializeComponent();
 
-            AttributeDisciplinas();
-
             txtIdAluno.Text = contaAlunos.ToString();
+
             InitList();
-        }
-
-        
-
-        private void AttributeDisciplinas()
-        {
-            
         }
 
         private void FormAlunos_Load(object sender, EventArgs e)
@@ -62,7 +50,7 @@ namespace WinFormsAlunos
             txtNome.Clear();
             txtApelido.Clear();
             txtIdAluno.Text = contaAlunos.ToString();
-            txtNome.Focus();    
+            txtNome.Focus();
         }
 
         #region Init List podem ser apenas um método
@@ -126,7 +114,7 @@ namespace WinFormsAlunos
                     }
                 }
 
-                if(deleted != null)
+                if (deleted != null)
                 {
                     DialogResult resposta;
 
@@ -135,7 +123,7 @@ namespace WinFormsAlunos
                         MessageBoxButtons.OKCancel,
                         MessageBoxIcon.Question);
 
-                    if(DialogResult.OK == resposta)
+                    if (DialogResult.OK == resposta)
                     {
                         Data.Alunos.Remove(deleted);
                         SQLiteDataAccess.DeleteAluno(deleted);
@@ -157,9 +145,9 @@ namespace WinFormsAlunos
             Aluno alunoToEdit = (Aluno)listBoxAlunos.SelectedItem;
             Aluno editado = null;
 
-            if(alunoToEdit != null) 
+            if (alunoToEdit != null)
             {
-                foreach(Aluno aluno in Data.Alunos)
+                foreach (Aluno aluno in Data.Alunos)
                 {
                     if (alunoToEdit.IdAluno == aluno.IdAluno)
                     {
@@ -183,7 +171,7 @@ namespace WinFormsAlunos
 
             if (alunoTemp != null)
             {
-                foreach(Aluno aluno in Data.Alunos)
+                foreach (Aluno aluno in Data.Alunos)
                 {
                     editado = aluno;
                 }
@@ -194,19 +182,6 @@ namespace WinFormsAlunos
             }
         }
 
-        //private void PopulateDisciplinas()
-        //{
-        //    for (int i = 0; i < 10; i++)
-        //    {
-        //        Disciplinas.Add(new Disciplina()
-        //        {
-        //            IdDisciplina = i,
-        //            Name = $"Disciplina {i + 1}",
-        //            Description = $"{Name} Descrição"
-        //        });
-        //    }
-        //}
-
         private void listBoxAlunos_SelectedIndexChanged(object sender, EventArgs e)
         {
             alunoTemp = (Aluno)listBoxAlunos.SelectedItem;
@@ -214,6 +189,45 @@ namespace WinFormsAlunos
             if (alunoTemp != null)
             {
                 InitListAlunos();
+            }
+        }
+
+        private void btnRemoverDisciplina_Click(object sender, EventArgs e)
+        {
+            Disciplina disciplinaToRemove = (Disciplina)listBoxDisciplinasAluno.SelectedItem;
+
+            Disciplina removed = null;
+
+            Data.PrintAlunoDisciplina();
+
+            if(disciplinaToRemove != null)
+            {
+                foreach(Disciplina disciplina in alunoTemp.Disciplinas)
+                {
+                    if(disciplina.IdDisciplina == disciplinaToRemove.IdDisciplina)
+                    {
+                        removed = disciplina;
+                    }
+                }
+
+                if(removed != null)
+                {
+                    DialogResult resposta;
+
+                    resposta = MessageBox.Show($"Tem a certeza que pretende remover a disciplina {removed.Name} do aluno {alunoTemp.FullName}",
+                        "Apagar",
+                        MessageBoxButtons.OKCancel,
+                        MessageBoxIcon.Question);
+
+                    if (DialogResult.OK == resposta)
+                    {
+                        alunoTemp.Disciplinas.Remove(removed);
+                        SQLiteDataAccess.DeleteAlunoDisciplina(alunoTemp, removed);
+                        alunoTemp.RemoveDisciplina(removed);
+                        Data.PrintAlunoDisciplina();
+                        InitListAlunos();
+                    }
+                }
             }
         }
     }

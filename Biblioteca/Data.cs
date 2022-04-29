@@ -31,5 +31,23 @@ namespace Biblioteca
                 }
             }
         }
+
+        public static void UpdateCurrentAluno(Aluno aluno)
+        {
+            if(Alunos.Any(a => a.IdAluno == aluno.IdAluno))
+            {
+            }
+        }
+
+        public static void PrintAlunoDisciplina()
+        {
+            foreach(Aluno aluno in Alunos)
+            {
+                foreach(Disciplina disciplina in aluno.Disciplinas)
+                {
+                    System.Diagnostics.Debug.WriteLine(disciplina.FullData);
+                }
+            }
+        }
     }
 }

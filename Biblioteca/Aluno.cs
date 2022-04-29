@@ -50,7 +50,9 @@ namespace Biblioteca
         /// <returns>true se o aluno não tiver a disciplina adicionada, senão false</returns>
         public bool RemoveDisciplina(Disciplina disciplina)
         {
-            if (Disciplinas.Contains(disciplina))
+            int idDisciplina = disciplina.IdDisciplina;
+
+            if (Disciplinas.Any(i => i.IdDisciplina == idDisciplina))
             {
                 Disciplinas.Remove(disciplina);
                 return true;

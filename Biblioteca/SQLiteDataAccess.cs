@@ -12,6 +12,33 @@ namespace Biblioteca
 {
     public class SQLiteDataAccess
     {
+        #region CREATE
+        public static void InsertAluno(Aluno aluno)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute("INSERT INTO Aluno (Name, Surname) VALUES (@Name, @Surname)", aluno);
+            }
+        }
+
+        public static void InsertDisciplina(Disciplina disciplina)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute("INSERT INTO Disciplina (Name, Description) VALUES (@Name, @Description)", disciplina);
+            }
+        }
+
+        public static void InsertAlunoDisciplina(AlunoDisciplina alunoDisciplina)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute($"INSERT INTO AlunoDisciplina (IdAluno, IdDisciplina) VALUES ({alunoDisciplina.IdAluno}, {alunoDisciplina.IdDisciplina})");
+            }
+        }
+        #endregion
+
+        #region READ
         public static List<Aluno> LoadAlunos()
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
@@ -41,31 +68,9 @@ namespace Biblioteca
                 return output.ToList();
             }
         }
+        #endregion
 
-        public static void InsertAluno(Aluno aluno)
-        {
-            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-            {
-                cnn.Execute("INSERT INTO Aluno (Name, Surname) VALUES (@Name, @Surname)", aluno);
-            }
-        }
-
-        public static void InsertDisciplina(Disciplina disciplina)
-        {
-            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-            {
-                cnn.Execute("INSERT INTO Disciplina (Name, Description) VALUES (@Name, @Description)", disciplina);
-            }
-        }
-
-        public static void InsertAlunoDisciplina(AlunoDisciplina alunoDisciplina)
-        {
-            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-            {
-                cnn.Execute($"INSERT INTO AlunoDisciplina (IdAluno, IdDisciplina) VALUES ({alunoDisciplina.IdAluno}, {alunoDisciplina.IdDisciplina})");
-            }
-        }
-
+        #region DELETE
         public static void DeleteAluno(Aluno aluno)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
@@ -73,6 +78,7 @@ namespace Biblioteca
                 cnn.Execute($"DELETE FROM Aluno WHERE IdAluno = {aluno.IdAluno}");
             }
         }
+
         public static void DeleteDisciplina(Disciplina disciplina)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
@@ -81,6 +87,14 @@ namespace Biblioteca
             }
         }
 
+        public static void DeleteAlunoDisciplina(Aluno aluno, Disciplina disciplina)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute($"DELETE FROM AlunoDisciplina WHERE IdAluno = {aluno.IdAluno} AND IdDisciplina = {disciplina.IdDisciplina}");
+            }
+        }
+        #endregion
 
         public static async Task<List<Aluno>> LoadAlunosAsync()
         {
